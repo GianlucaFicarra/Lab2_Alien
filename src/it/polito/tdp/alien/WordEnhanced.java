@@ -3,26 +3,34 @@ package it.polito.tdp.alien;
 import java.util.LinkedList;
 import java.util.List;
 
-public class WordEnhanced {
+
+/*JAVABEAN
+  Nel package it.polito.tdp.alien creare una classe WordEnhanced per memorizzare l’associazione
+  tra parola aliena ed originale, si differenzia da word perchè qui ho più di una traduzione per parola
+ */
+
+public class WordEnhanced { 
 	
 	//MODELLO CON WordEnhanced PUNTO 2
-		//definesce oggetto di ogni singola parola
 			private String alienWord = new String();
-			List<String> translation = new LinkedList<String>();
+			List<String> translation = new LinkedList<String>();  //una lista di traduzioni
 		
 			
-
-			public WordEnhanced(String alienWord, List<String> translation) {
-				super();
+			public WordEnhanced(String alienWord) {
+				this.translation = new LinkedList<String>();
 				this.alienWord = alienWord;
-				this.translation = translation;
 			}
 
-			public List<String> getTranslation() {
-				return translation;
+			public String getTranslation() { //restituisco direttamente la stringa con le traduzioni
+				String s = "";
+				for (String a : translation) {
+					s +=  "\n" + a ;
+				}
+				return s;
 			}
 
-			public void setTranslation(String translation) {
+			public void setTranslation(String translation) {//se non era già contenuta aggiungila alla lista
+				if (!this.translation.contains(translation)) 
 				this.translation.add(translation);
 			}
 

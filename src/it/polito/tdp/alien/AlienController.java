@@ -31,7 +31,7 @@ public class AlienController {
     private Button btnReset;
        
     
-    private AlienDictionary dizionario = new AlienDictionary(); //creo classe dove ci vado ad aggiungere e mie parole
+    private AlienDictionary dizionario = new AlienDictionary(); //creo classe dove ci vado ad aggiungere Le mie parole
     
     
     @FXML // This method is called by the FXMLLoader when initialization is complete
@@ -43,63 +43,105 @@ public class AlienController {
     	
     }
   
-    /* PUNTO 1
-    @FXML
-    void doTranslate(ActionEvent event) {
-    	   
-    	   String rigo=txtWord.getText().toLowerCase();
-    	   if(rigo.length()==0)
-    		   txtResult.appendText(("Aggiunge le parole!!"));
-    		   
-    	   String[] array=rigo.split(" ");//da fare
-    	   
-    	   if(array.length==1) {
-    		   //devo tradurre la parola
-    		 String traduzione=dizionario.translateWord(array[0]);
-    		 txtResult.setText(String.format("La traduzione di %s e': %s\n", array[0], traduzione));
-    		   
-    	   } else if(array.length==2 && array[1]!=null) {
-    		   //devo aggiungere parola
-    		   dizionario.addWord(array[0], array[1]);
-    		   txtResult.setText(String.format("Aggiungo la parola %s e la sua traduzione %s\n", array[0], array[1]));
-    		   
-    	   } else  txtResult.appendText(("Hai sbagliato ad inserire le parole!!"));
-    	    	
-    }
-    */
-    
-    //PUNTO 2
-    @FXML
-    void doTranslate(ActionEvent event) {
- 	   
- 	   String rigo=txtWord.getText().toLowerCase();
- 	   if(rigo.length()==0)
- 		   txtResult.appendText(("Aggiunge le parole!!"));
- 		   
- 	   String[] array=rigo.split(" ");
- 	   
- 	   if(array.length==1) {
- 		   //devo tradurre la parola
- 		 String traduzione="";
- 		 for(String w: dizionario.translateWord(array[0]) )
- 			 traduzione+=w+"\n";
- 		 
- 		 txtResult.appendText(String.format("La traduzione di %s e':\n%s", array[0], traduzione));
- 		   
- 	   } else if(array.length==2 && array[1]!=null) {
- 		   //devo aggiungere parola
- 		   dizionario.addWord(array[0], array[1]);
- 		   txtResult.appendText(String.format("Aggiungo la parola %s e la sua traduzione %s\n", array[0], array[1]));
- 		   
- 	   } else  txtResult.appendText(("Hai sbagliato ad inserire le parole!!"));
- 	    	
- }
-    
+
     @FXML
     void doReset(ActionEvent event) {
     	dizionario= new AlienDictionary();
     	txtResult.clear();
     	txtWord.clear();
     }
+    
+    
+    /* PUNTO 1
+    @FXML
+    void doTranslate(ActionEvent event) {
+    	   
+    	   txtResult.clear();
+    	   String rigo=txtWord.getText().toLowerCase();
+    	   
+    	   //controllo sull'input
+    	   if(rigo.length()==0 || rigo==null) {
+    		   txtResult.appendText(("Aggiunge le parole!!"));
+    		   return;
+    	   }
+    		   
+    	   String[] array=rigo.split(" ");
+    	   
+    	   if(array.length==1) { //se una parola, la devo tradurre
+    		   
+    		 //verifico se siano realmente parole
+   			if (!array[0].matches("[a-zA-Z]*")) { //matches=true solo se stringa corrisponde all'espressione regolare data
+   				txtResult.setText("Inserire solo caratteri alfabetici.");
+   				return;
+   			}
+    		 String traduzione=dizionario.translateWord(array[0]);
+    		 
+    		 if (traduzione != null) 
+    			 txtResult.setText(String.format("La traduzione di %s e': %s\n", array[0], traduzione));
+    		 else
+    			 txtResult.setText("La parola cercata non esiste nel dizionario.");
+    		   
+    		 
+    	   } else if(array.length==2 && array[1]!=null) { //se due parole le devo aggiungere
+    		   
+    		   //verifico se siano realmente parole
+    			if (!array[0].matches("[a-zA-Z]*") || !array[1].matches("[a-zA-Z]*")) {
+    				txtResult.setText("Inserire solo caratteri alfabetici.");
+    				return;
+    			}
+    		   
+    		   dizionario.addWord(array[0], array[1]);
+    		   txtResult.setText(String.format("Aggiungo la parola %s e la sua traduzione %s\n", array[0], array[1]));
+    		   
+    	   } else  txtResult.appendText(("Hai sbagliato ad inserire le parole!!")); //nel caso siano di più
+    	    	
+    }*/
+    
+    
+    //PUNTO 2: traduzioni multiple
+    @FXML
+    void doTranslate(ActionEvent event) {
+ 	   
+ 	   txtResult.clear();
+ 	   String rigo=txtWord.getText().toLowerCase();
+ 	   
+ 	   if(rigo.length()==0 || rigo==null){
+ 		   txtResult.appendText(("Aggiunge le parole!!"));
+ 		   return;
+		}
+ 		   
+ 	   String[] array=rigo.split(" ");
+ 	   
+ 	   
+ 	   if(array.length==1) { //devo tradurre la parola
+ 	   
+ 	   if (!array[0].matches("[a-zA-Z]*")) {
+   				txtResult.setText("Inserire solo caratteri alfabetici.");
+   				return;
+   		} else {
+ 	   
+ 		 String traduzione=dizionario.translateWord(array[0]);
+ 		 
+ 		 if (traduzione != null) 
+    			 txtResult.setText(String.format("La traduzione di %s e': %s\n", array[0], traduzione));
+    		 else
+    			 txtResult.setText("La parola cercata non esiste nel dizionario.");
+    		   
+   		}
+ 		   
+ 	   } else if(array.length==2 && array[1]!=null) { //devo aggiungere parola
+ 		   
+ 		 //verifico se siano realmente parole
+    			if (!array[0].matches("[a-zA-Z]*") || !array[1].matches("[a-zA-Z]*")) {
+    				txtResult.setText("Inserire solo caratteri alfabetici.");
+    				return;
+    			} 
+ 		   
+ 		   dizionario.addWord(array[0], array[1]);
+ 		   txtResult.appendText(String.format("Aggiungo la parola %s e la sua traduzione %s\n", array[0], array[1]));
+ 		   
+ 	   } else  txtResult.appendText(("Hai sbagliato ad inserire le parole!!"));
+ 	    	
+ }
     
 }

@@ -6,7 +6,14 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.fxml.FXMLLoader;
 
+/*FUNZIONAMENTO:
+   -Inserire una nuova parola e la relativa traduzione secondo il seguente pattern:
+	<parola aliena> <traduzione> (separate da uno spazio)
+	Cliccando sul bottone Translate la parola viene aggiunta al dizionario.
 
+	-Cercare la traduzione di una parola esistente inserendo <parola aliena> e facendo click sul bottone
+	Translate. La traduzione verrà visualizzata nell’area di testo sottostante.
+*/
 
 public class Main extends Application {
 	@Override
